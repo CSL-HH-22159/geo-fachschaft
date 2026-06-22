@@ -377,7 +377,13 @@ async function ladeDaten() {
             dateien = [{ name: parsed?.name || 'Datei', link: parsed?.Url || dateiRaw }];
           }
         } catch {
-          dateien = [{ name: 'Datei', link: typeof dateiRaw === 'object' ? (dateiRaw.Url || '') : dateiRaw }];
+          // Kommagetrennte SharePoint-Links
+          const links = dateiRaw.split(',').map(l => l.trim()).filter(l => l.startsWith('http'));
+          if (links.length > 0) {
+            dateien = links.map((l, i) => ({ name: `Datei ${i + 1}`, link: l }));
+          } else {
+            dateien = [{ name: 'Datei', link: dateiRaw }];
+          }
         }
       }
       return {
