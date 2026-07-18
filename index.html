@@ -100,6 +100,20 @@
     }
     button.reset:hover { background: #2c7a4b; color: white; }
 
+    #btn-upload {
+      margin-left: auto;
+      align-self: flex-end;
+      padding: 10px 20px;
+      background: #2c7a4b;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    #btn-upload:hover { background: #245f3b; }
+
     .results-info { padding: 16px 32px 8px; font-size: 0.85rem; color: #666; }
 
     .loading {
@@ -130,9 +144,11 @@
       box-shadow: 0 1px 4px rgba(0,0,0,0.08);
       border-left: 4px solid #ccc;
       transition: box-shadow 0.2s;
+      position: relative;
     }
     .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
     .card.typ-praxisgeo      { border-left-color: #2c7a4b; }
+    .card.typ-praxisgeographie { border-left-color: #2c7a4b; }
     .card.typ-arbeitsblatt   { border-left-color: #2980b9; }
     .card.typ-arbeitsblaetter { border-left-color: #2980b9; }
     .card.typ-klausur        { border-left-color: #c0392b; }
@@ -144,6 +160,7 @@
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 8px;
+      gap: 8px;
     }
     .badge-typ {
       font-size: 0.7rem;
@@ -156,7 +173,7 @@
       background: #f0f4f8;
       color: #555;
     }
-    .card.typ-praxisgeo .badge-typ, .card.typ-praxis-geographie .badge-typ { background: #e8f5ee; color: #2c7a4b; }
+    .card.typ-praxisgeo .badge-typ, .card.typ-praxisgeographie .badge-typ { background: #e8f5ee; color: #2c7a4b; }
     .card.typ-arbeitsblatt .badge-typ, .card.typ-arbeitsblaetter .badge-typ { background: #eaf4fb; color: #2980b9; }
     .card.typ-klausur .badge-typ { background: #fdf0ef; color: #c0392b; }
     .card.typ-bewertungsbogen .badge-typ { background: #fef9e7; color: #d68910; }
@@ -168,11 +185,13 @@
       color: #555;
       padding: 3px 8px;
       border-radius: 20px;
+      white-space: nowrap;
     }
     .card h3 { font-size: 1rem; margin-bottom: 4px; line-height: 1.3; }
     .card .thema { font-size: 0.8rem; color: #888; margin-bottom: 8px; }
     .card .beschreibung { font-size: 0.85rem; color: #555; margin-bottom: 12px; line-height: 1.5; }
     .card .quelle { font-size: 0.75rem; color: #aaa; margin-bottom: 10px; }
+    .card .autor { font-size: 0.72rem; color: #bbb; margin-top: 10px; }
     .card a.btn {
       display: inline-block;
       padding: 6px 14px;
@@ -183,8 +202,87 @@
       font-size: 0.85rem;
     }
     .card a.btn:hover { background: #245f3b; }
+    .btn-delete {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      opacity: 0.35;
+      padding: 4px;
+    }
+    .btn-delete:hover { opacity: 1; }
 
     .no-results { padding: 48px 32px; text-align: center; color: #999; font-size: 1rem; }
+
+    /* UPLOAD MODAL */
+    #upload-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 100;
+      align-items: flex-start;
+      justify-content: center;
+      overflow-y: auto;
+      padding: 32px 16px;
+    }
+    #upload-overlay.open { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 12px;
+      padding: 28px 32px;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+    .modal h2 { color: #2c7a4b; font-size: 1.2rem; margin-bottom: 18px; }
+    .modal .form-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px; }
+    .modal .form-row label { font-size: 0.78rem; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
+    .modal .form-row label .opt { font-weight: 400; text-transform: none; color: #aaa; letter-spacing: 0; }
+    .modal input[type=text], .modal select, .modal textarea {
+      padding: 9px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      width: 100%;
+    }
+    .modal textarea { resize: vertical; min-height: 70px; }
+    .modal input[type=file] { font-size: 0.9rem; }
+    .file-hint { font-size: 0.78rem; color: #999; margin-top: 3px; }
+    .modal-buttons { display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px; }
+    .modal-buttons button {
+      padding: 10px 22px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: none;
+    }
+    #btn-upload-cancel { background: #f0f4f8; color: #555; }
+    #btn-upload-submit { background: #2c7a4b; color: white; font-weight: 600; }
+    #btn-upload-submit:disabled { background: #9dbfab; cursor: not-allowed; }
+    #up-status { font-size: 0.85rem; margin-top: 14px; color: #555; line-height: 1.6; }
+    #up-status .err { color: #c0392b; }
+    #up-status .ok { color: #2c7a4b; }
+
+    /* TOAST */
+    #toast {
+      display: none;
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2c7a4b;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+      z-index: 200;
+    }
   </style>
 </head>
 <body>
@@ -247,6 +345,7 @@
       </select>
     </div>
     <button class="reset" onclick="resetFilter()">↺ Zurücksetzen</button>
+    <button id="btn-upload" onclick="openUpload()">➕ Material hochladen</button>
   </div>
 
   <div class="results-info" id="results-info"></div>
@@ -258,6 +357,67 @@
   <div class="no-results" id="no-results" style="display:none">Keine Materialien gefunden.</div>
 </div>
 
+<!-- UPLOAD MODAL -->
+<div id="upload-overlay">
+  <div class="modal">
+    <h2>➕ Material hochladen</h2>
+    <div class="form-row">
+      <label>Titel *</label>
+      <input type="text" id="up-titel" placeholder="z. B. Klausur Plattentektonik mit Erwartungshorizont">
+    </div>
+    <div class="form-row">
+      <label>Klassenstufe *</label>
+      <select id="up-klasse">
+        <option value="">Bitte wählen...</option>
+        <option value="5">Klasse 5</option>
+        <option value="7">Klasse 7</option>
+        <option value="8">Klasse 8</option>
+        <option value="9">Klasse 9</option>
+        <option value="10">Klasse 10</option>
+        <option value="S1-S4">S1-S4 (Oberstufe)</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Thema *</label>
+      <select id="up-thema">
+        <option value="">Erst Klassenstufe wählen...</option>
+      </select>
+      <input type="text" id="up-thema-frei" placeholder="Eigenes Thema eingeben..." style="display:none; margin-top:6px">
+    </div>
+    <div class="form-row">
+      <label>Materialtyp *</label>
+      <select id="up-typ">
+        <option value="">Bitte wählen...</option>
+        <option value="Praxis Geographie">Praxis Geographie</option>
+        <option value="Arbeitsblätter">Arbeitsblätter</option>
+        <option value="Klausur">Klausur</option>
+        <option value="Bewertungsbogen">Bewertungsbogen</option>
+        <option value="Projektidee">Projektidee</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Beschreibung <span class="opt">(optional)</span></label>
+      <textarea id="up-beschreibung" placeholder="Kurz: Was ist es, wie einsetzbar?"></textarea>
+    </div>
+    <div class="form-row">
+      <label>Quelle <span class="opt">(optional)</span></label>
+      <input type="text" id="up-quelle" placeholder="z. B. Praxis Geographie 3/2024, selbst erstellt...">
+    </div>
+    <div class="form-row">
+      <label>Datei(en) <span class="opt">(optional, mehrere möglich)</span></label>
+      <input type="file" id="up-dateien" multiple>
+      <div class="file-hint">PDF, Word, PowerPoint etc. – wird automatisch im passenden Klassenstufen-Ordner in SharePoint abgelegt.</div>
+    </div>
+    <div id="up-status"></div>
+    <div class="modal-buttons">
+      <button id="btn-upload-cancel" onclick="closeUpload()">Abbrechen</button>
+      <button id="btn-upload-submit" onclick="submitUpload()">Hochladen</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
 <script>
 // ============================================================
 // KONFIGURATION
@@ -266,7 +426,18 @@ const MS_CLIENT_ID = 'd4cf43b4-e994-494f-b1ff-7ae944440687';
 const MS_TENANT_ID = '1ec883c9-e58e-4a81-a220-9f26696a86fd';
 const SHAREPOINT_SITE = 'gymbuckhorn.sharepoint.com:/sites/FachschaftGeographie:';
 const LIST_NAME = 'Materialien';
+const GRAPH = 'https://graph.microsoft.com/v1.0';
 const REDIRECT_URI = window.location.origin + window.location.pathname;
+
+// Zielordner in "Freigegebene Dokumente" je Klassenstufe
+const KLASSEN_ORDNER = {
+  '5': 'Klassenstufe 5',
+  '7': 'Klassenstufe 7',
+  '8': 'Klassenstufe 8',
+  '9': 'Klassenstufe 9',
+  '10': 'Klassenstufe 10',
+  'S1-S4': 'Oberstufe'
+};
 
 const msalConfig = {
   auth: {
@@ -278,39 +449,57 @@ const msalConfig = {
 };
 
 const loginRequest = {
-  scopes: ['User.Read', 'Sites.Read.All']
+  scopes: ['User.Read', 'Sites.ReadWrite.All']
 };
 
 const msalInstance = new msal.PublicClientApplication(msalConfig);
 
+let siteId = null;
+let currentUserEmail = '';
+let alleDaten = [];
+
 // ============================================================
-// THEMEN PRO KLASSENSTUFE
+// THEMEN PRO KLASSENSTUFE (Curriculum)
 // ============================================================
 const themenProKlasse = {
-  "":    ["Orientierung im Raum","Städtische Räume","Großlandschaften Deutschland","Leben in Europa","Extreme Klimazonen","Klima- und Vegetationszonen","USA","China und Indien","BRICS-Staaten","Endogene Prozesse","Exogene Prozesse","Klimawandel","Globalisierung","Entwicklungsunterschiede"],
-  "5":   ["Orientierung im Raum","Städtische Räume","Großlandschaften Deutschland"],
-  "7/8": ["Leben in Europa","Extreme Klimazonen","Klima- und Vegetationszonen"],
-  "8":   ["USA","China und Indien","BRICS-Staaten"],
-  "9":   ["Endogene Prozesse","Exogene Prozesse"],
-  "10":  ["Klimawandel","Globalisierung","Entwicklungsunterschiede"]
+  '5':     ['Orientierung im Raum', 'Städtische Räume', 'Großlandschaften Deutschland'],
+  '7':     ['Leben in Europa', 'Extreme Klimazonen', 'Klima- und Vegetationszonen'],
+  '8':     ['USA', 'China und Indien', 'BRICS-Staaten'],
+  '9':     ['Endogene Prozesse', 'Exogene Prozesse'],
+  '10':    ['Klimawandel', 'Globalisierung', 'Entwicklungsunterschiede'],
+  'S1-S4': []
 };
+
+function themenFuerKlasse(klasse) {
+  // Curriculum-Themen + alles, was in den Daten für diese Klasse tatsächlich vorkommt
+  const curriculum = klasse
+    ? (themenProKlasse[klasse] || [])
+    : Object.values(themenProKlasse).flat();
+  const ausDaten = alleDaten
+    .filter(i => !klasse || i.klasse === klasse)
+    .map(i => i.thema)
+    .filter(Boolean);
+  const extra = [...new Set(ausDaten)].filter(t => !curriculum.includes(t)).sort();
+  return [...curriculum, ...extra];
+}
 
 function updateThemenDropdown(klasse) {
   const select = document.getElementById('filter-thema');
   const aktuell = select.value;
+  const themen = themenFuerKlasse(klasse);
   select.innerHTML = '<option value="">Alle Themen</option>';
-  themenProKlasse[klasse || ""].forEach(thema => {
+  themen.forEach(thema => {
     const opt = document.createElement('option');
     opt.value = thema;
     opt.textContent = thema;
     if (thema === aktuell) opt.selected = true;
     select.appendChild(opt);
   });
-  if (!themenProKlasse[klasse || ""].includes(aktuell)) select.value = '';
+  if (!themen.includes(aktuell)) select.value = '';
 }
 
 // ============================================================
-// LOGIN / LOGOUT
+// LOGIN / LOGOUT / TOKEN
 // ============================================================
 async function login() {
   document.getElementById('login-error').textContent = '';
@@ -322,91 +511,127 @@ async function login() {
 }
 
 function logout() {
-  msalInstance.logoutPopup();
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
+  msalInstance.logoutRedirect({ postLogoutRedirectUri: REDIRECT_URI });
 }
 
 async function getToken() {
   const accounts = msalInstance.getAllAccounts();
   if (!accounts.length) return null;
-  const result = await msalInstance.acquireTokenSilent({ ...loginRequest, account: accounts[0] });
-  return result.accessToken;
+  try {
+    const result = await msalInstance.acquireTokenSilent({ ...loginRequest, account: accounts[0] });
+    return result.accessToken;
+  } catch (e) {
+    // Token abgelaufen oder neue Berechtigung nötig → neu anmelden
+    await msalInstance.acquireTokenRedirect(loginRequest);
+  }
 }
 
 async function showApp(account) {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   document.getElementById('user-name').textContent = account.name || account.username;
-  updateThemenDropdown('');
+  currentUserEmail = (account.username || '').toLowerCase();
   await ladeDaten();
+}
+
+// ============================================================
+// GRAPH HELPER
+// ============================================================
+async function graphFetch(url, options = {}) {
+  const token = await getToken();
+  const res = await fetch(url, {
+    ...options,
+    headers: { Authorization: `Bearer ${token}`, ...(options.headers || {}) }
+  });
+  if (!res.ok) {
+    let msg = 'HTTP ' + res.status;
+    try {
+      const j = await res.json();
+      if (j.error && j.error.message) msg = j.error.message;
+    } catch {}
+    const err = new Error(msg);
+    err.status = res.status;
+    throw err;
+  }
+  return res;
+}
+
+async function ensureSiteId() {
+  if (siteId) return siteId;
+  const res = await graphFetch(`${GRAPH}/sites/${SHAREPOINT_SITE}`);
+  const site = await res.json();
+  siteId = site.id;
+  return siteId;
 }
 
 // ============================================================
 // SHAREPOINT DATEN LADEN
 // ============================================================
-let alleDaten = [];
-
 async function ladeDaten() {
   document.getElementById('loading').style.display = 'block';
   document.getElementById('cards').innerHTML = '';
+  document.getElementById('no-results').style.display = 'none';
   try {
-    const token = await getToken();
-    const siteRes = await fetch(`https://graph.microsoft.com/v1.0/sites/${SHAREPOINT_SITE}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    const site = await siteRes.json();
-
-    const itemsRes = await fetch(
-      `https://graph.microsoft.com/v1.0/sites/${site.id}/lists/${LIST_NAME}/items?$expand=fields&$top=500`,
-      { headers: { Authorization: `Bearer ${token}` } }
+    await ensureSiteId();
+    const itemsRes = await graphFetch(
+      `${GRAPH}/sites/${siteId}/lists/${LIST_NAME}/items?$expand=fields&$top=500`
     );
     const data = await itemsRes.json();
 
     alleDaten = (data.value || []).map(item => {
       const f = item.fields || {};
       const dateiRaw = f.Datei || f.PDF_x002f_Word || f.PDF || '';
-      let dateiUrl = '';
       let dateien = [];
       if (dateiRaw) {
         try {
           const parsed = JSON.parse(dateiRaw);
           if (Array.isArray(parsed)) {
-            dateien = parsed.map(d => ({ name: d.name, link: d.link }));
+            dateien = parsed.map(d => ({ name: d.name || 'Datei', link: d.link, id: d.id || null }));
           } else {
-            dateien = [{ name: parsed?.name || 'Datei', link: parsed?.Url || dateiRaw }];
+            dateien = [{ name: parsed?.name || 'Datei', link: parsed?.Url || dateiRaw, id: null }];
           }
         } catch {
-          // Kommagetrennte SharePoint-Links
+          // Kommagetrennte SharePoint-Links (Altbestand aus Power Automate)
           const links = dateiRaw.split(',').map(l => l.trim()).filter(l => l.startsWith('http'));
           if (links.length > 0) {
-            dateien = links.map((l, i) => ({ name: `Datei ${i + 1}`, link: l }));
+            dateien = links.map((l, i) => ({ name: `Datei ${i + 1}`, link: l, id: null }));
           } else {
-            dateien = [{ name: 'Datei', link: dateiRaw }];
+            dateien = [{ name: 'Datei', link: dateiRaw, id: null }];
           }
         }
       }
+      const creator = item.createdBy && item.createdBy.user ? item.createdBy.user : {};
       return {
+        id: item.id,
         titel: f.Title || '',
         klasse: f.Klassenstufe || '',
         thema: f.Thema || '',
         typ: f.Materialtyp || '',
         beschreibung: f.Beschreibung || '',
         quelle: f.Quelle || '',
-        dateien
+        dateien,
+        erstellerEmail: (creator.email || '').toLowerCase(),
+        erstellerName: creator.displayName || ''
       };
     });
 
     document.getElementById('loading').style.display = 'none';
+    updateThemenDropdown(document.getElementById('filter-klasse').value);
     filterDaten();
   } catch (e) {
-    document.getElementById('loading').innerHTML = '⚠️ Fehler beim Laden: ' + e.message;
+    document.getElementById('loading').innerHTML = '⚠️ Fehler beim Laden: ' + esc(e.message);
   }
 }
 
 // ============================================================
 // FILTER & ANZEIGE
 // ============================================================
+function esc(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 function filterDaten() {
   const suche = document.getElementById('suche').value.toLowerCase();
   const klasse = document.getElementById('filter-klasse').value;
@@ -441,20 +666,23 @@ function renderKarten(liste) {
 
   liste.forEach(item => {
     const typClass = (item.typ || '').toLowerCase().replace(/\s+/g, '').replace(/ä/g, 'a').replace(/ö/g, 'o').replace(/ü/g, 'u');
+    const meins = item.erstellerEmail && item.erstellerEmail === currentUserEmail;
     const card = document.createElement('div');
     card.className = `card typ-${typClass}`;
     card.innerHTML = `
       <div class="card-header">
-        <span class="badge-typ">${item.typ || 'Sonstiges'}</span>
-        <span class="badge-klasse">Klasse ${item.klasse}</span>
+        <span class="badge-typ">${esc(item.typ) || 'Sonstiges'}</span>
+        <span class="badge-klasse">Klasse ${esc(item.klasse)}</span>
       </div>
-      <h3>${item.titel}</h3>
-      <div class="thema">📍 ${item.thema}</div>
-      ${item.beschreibung ? `<div class="beschreibung">${item.beschreibung}</div>` : ''}
-      ${item.quelle ? `<div class="quelle">Quelle: ${item.quelle}</div>` : ''}
+      <h3>${esc(item.titel)}</h3>
+      <div class="thema">📍 ${esc(item.thema)}</div>
+      ${item.beschreibung ? `<div class="beschreibung">${esc(item.beschreibung)}</div>` : ''}
+      ${item.quelle ? `<div class="quelle">Quelle: ${esc(item.quelle)}</div>` : ''}
       ${item.dateien && item.dateien.length > 0
-        ? item.dateien.map(d => `<a class="btn" href="${d.link}" target="_blank" style="margin-right:6px;margin-top:4px;display:inline-block">📄 ${d.name}</a>`).join('')
+        ? item.dateien.map(d => `<a class="btn" href="${esc(d.link)}" target="_blank" style="margin-right:6px;margin-top:4px;display:inline-block">📄 ${esc(d.name)}</a>`).join('')
         : '<span style="font-size:0.8rem;color:#aaa">Keine Datei</span>'}
+      ${item.erstellerName ? `<div class="autor">Eingestellt von ${esc(item.erstellerName)}</div>` : ''}
+      ${meins ? `<button class="btn-delete" title="Eigenen Eintrag löschen" onclick="eintragLoeschen('${esc(item.id)}')">🗑️</button>` : ''}
     `;
     container.appendChild(card);
   });
@@ -476,7 +704,213 @@ document.getElementById('filter-klasse').addEventListener('change', () => {
 document.getElementById('filter-thema').addEventListener('change', filterDaten);
 document.getElementById('filter-typ').addEventListener('change', filterDaten);
 
-// Beim Laden prüfen ob schon eingeloggt
+// ============================================================
+// UPLOAD
+// ============================================================
+const OTHER_THEMA = '__anderes__';
+
+function openUpload() {
+  document.getElementById('upload-overlay').classList.add('open');
+  document.getElementById('up-status').innerHTML = '';
+}
+
+function closeUpload() {
+  document.getElementById('upload-overlay').classList.remove('open');
+}
+
+function updateUploadThemen() {
+  const klasse = document.getElementById('up-klasse').value;
+  const select = document.getElementById('up-thema');
+  select.innerHTML = '';
+  if (!klasse) {
+    select.innerHTML = '<option value="">Erst Klassenstufe wählen...</option>';
+  } else {
+    select.innerHTML = '<option value="">Bitte wählen...</option>';
+    themenFuerKlasse(klasse).forEach(thema => {
+      const opt = document.createElement('option');
+      opt.value = thema;
+      opt.textContent = thema;
+      select.appendChild(opt);
+    });
+    const opt = document.createElement('option');
+    opt.value = OTHER_THEMA;
+    opt.textContent = '✏️ Anderes Thema...';
+    select.appendChild(opt);
+  }
+  toggleThemaFrei();
+}
+
+function toggleThemaFrei() {
+  const frei = document.getElementById('up-thema').value === OTHER_THEMA;
+  document.getElementById('up-thema-frei').style.display = frei ? 'block' : 'none';
+}
+
+document.getElementById('up-klasse').addEventListener('change', updateUploadThemen);
+document.getElementById('up-thema').addEventListener('change', toggleThemaFrei);
+
+function setUploadStatus(html) {
+  document.getElementById('up-status').innerHTML = html;
+}
+
+async function ensureOrdner(name) {
+  try {
+    await graphFetch(`${GRAPH}/sites/${siteId}/drive/root:/${encodeURIComponent(name)}`);
+    return; // Ordner existiert
+  } catch (e) {
+    if (e.status !== 404) throw e;
+  }
+  try {
+    await graphFetch(`${GRAPH}/sites/${siteId}/drive/root/children`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, folder: {}, '@microsoft.graph.conflictBehavior': 'fail' })
+    });
+  } catch (e) {
+    if (e.status !== 409) throw e; // 409 = existiert schon (Race), ok
+  }
+}
+
+async function uploadDatei(file, ordner, onProgress) {
+  if (file.size === 0) throw new Error(`"${file.name}" ist leer.`);
+  const sessionRes = await graphFetch(
+    `${GRAPH}/sites/${siteId}/drive/root:/${encodeURIComponent(ordner)}/${encodeURIComponent(file.name)}:/createUploadSession`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ item: { '@microsoft.graph.conflictBehavior': 'rename', name: file.name } })
+    }
+  );
+  const session = await sessionRes.json();
+
+  const chunkSize = 3276800; // 3,125 MB – Vielfaches von 320 KiB (Graph-Vorgabe)
+  let start = 0;
+  let driveItem = null;
+  while (start < file.size) {
+    const end = Math.min(start + chunkSize, file.size);
+    const res = await fetch(session.uploadUrl, {
+      method: 'PUT',
+      headers: { 'Content-Range': `bytes ${start}-${end - 1}/${file.size}` },
+      body: file.slice(start, end)
+    });
+    if (!res.ok) throw new Error(`Upload von "${file.name}" fehlgeschlagen (HTTP ${res.status})`);
+    if (res.status === 200 || res.status === 201) driveItem = await res.json();
+    start = end;
+    onProgress(Math.round((end / file.size) * 100));
+  }
+  if (!driveItem) throw new Error(`Upload von "${file.name}" unvollständig.`);
+  return { name: driveItem.name, link: driveItem.webUrl, id: driveItem.id };
+}
+
+async function submitUpload() {
+  const titel = document.getElementById('up-titel').value.trim();
+  const klasse = document.getElementById('up-klasse').value;
+  let thema = document.getElementById('up-thema').value;
+  if (thema === OTHER_THEMA) thema = document.getElementById('up-thema-frei').value.trim();
+  const typ = document.getElementById('up-typ').value;
+  const beschreibung = document.getElementById('up-beschreibung').value.trim();
+  const quelle = document.getElementById('up-quelle').value.trim();
+  const files = [...document.getElementById('up-dateien').files];
+
+  if (!titel || !klasse || !thema || !typ) {
+    setUploadStatus('<span class="err">Bitte alle Pflichtfelder (*) ausfüllen.</span>');
+    return;
+  }
+
+  const submitBtn = document.getElementById('btn-upload-submit');
+  submitBtn.disabled = true;
+  try {
+    await ensureSiteId();
+    const ordner = KLASSEN_ORDNER[klasse] || 'General';
+    const hochgeladen = [];
+
+    if (files.length > 0) {
+      await ensureOrdner(ordner);
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        setUploadStatus(`Lade Datei ${i + 1}/${files.length} hoch: ${esc(file.name)} ... 0 %`);
+        const ergebnis = await uploadDatei(file, ordner, p => {
+          setUploadStatus(`Lade Datei ${i + 1}/${files.length} hoch: ${esc(file.name)} ... ${p} %`);
+        });
+        hochgeladen.push(ergebnis);
+      }
+    }
+
+    setUploadStatus('Speichere Eintrag in der Datenbank...');
+    await graphFetch(`${GRAPH}/sites/${siteId}/lists/${LIST_NAME}/items`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fields: {
+          Title: titel,
+          Klassenstufe: klasse,
+          Thema: thema,
+          Materialtyp: typ,
+          Beschreibung: beschreibung,
+          Quelle: quelle,
+          Datei: hochgeladen.length > 0 ? JSON.stringify(hochgeladen) : ''
+        }
+      })
+    });
+
+    setUploadStatus('<span class="ok">✅ Fertig!</span>');
+    // Formular leeren
+    ['up-titel', 'up-beschreibung', 'up-quelle', 'up-thema-frei'].forEach(id => document.getElementById(id).value = '');
+    ['up-klasse', 'up-thema', 'up-typ'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('up-dateien').value = '';
+    updateUploadThemen();
+    closeUpload();
+    zeigeToast('✅ Material wurde hochgeladen');
+    await ladeDaten();
+  } catch (e) {
+    setUploadStatus(`<span class="err">⚠️ Fehler: ${esc(e.message)}</span><br>Bitte erneut versuchen. Falls es wiederholt fehlschlägt, bitte an Christoph wenden.`);
+  } finally {
+    submitBtn.disabled = false;
+  }
+}
+
+// ============================================================
+// EIGENEN EINTRAG LÖSCHEN
+// ============================================================
+async function eintragLoeschen(id) {
+  const item = alleDaten.find(x => String(x.id) === String(id));
+  if (!item) return;
+  const mitDateien = item.dateien.some(d => d.id);
+  const frage = mitDateien
+    ? `„${item.titel}" wirklich löschen?\n\nDie zugehörige(n) Datei(en) werden ebenfalls aus SharePoint entfernt.`
+    : `„${item.titel}" wirklich löschen?`;
+  if (!confirm(frage)) return;
+
+  try {
+    for (const d of item.dateien) {
+      if (d.id) {
+        try {
+          await graphFetch(`${GRAPH}/sites/${siteId}/drive/items/${d.id}`, { method: 'DELETE' });
+        } catch {} // Datei evtl. schon manuell gelöscht – Eintrag trotzdem entfernen
+      }
+    }
+    await graphFetch(`${GRAPH}/sites/${siteId}/lists/${LIST_NAME}/items/${id}`, { method: 'DELETE' });
+    zeigeToast('🗑️ Eintrag gelöscht');
+    await ladeDaten();
+  } catch (e) {
+    alert('Löschen fehlgeschlagen: ' + e.message);
+  }
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+let toastTimer = null;
+function zeigeToast(text) {
+  const t = document.getElementById('toast');
+  t.textContent = text;
+  t.style.display = 'block';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.style.display = 'none'; }, 4000);
+}
+
+// ============================================================
+// START: Beim Laden prüfen, ob schon eingeloggt
+// ============================================================
 (async () => {
   try {
     const result = await msalInstance.handleRedirectPromise();
